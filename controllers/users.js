@@ -18,6 +18,7 @@ exports.addUser = async (data) => {
         const userAddData = await UserModel.create(data);
         return userAddData;
     } catch (error) {
+        console.log(error);
         return error.message;
     }
 }
@@ -29,6 +30,7 @@ exports.login = async (data) => {
             throw new Error("User Not Registered!!!");
         }
         const checkHash = await bcrypt.compare(data.password, checkUser[0].password);
+        console.log(checkHash);
         if (!checkHash) {
             throw new Error("Wrong Email Password Combination!!!");
         }

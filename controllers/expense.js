@@ -2,28 +2,29 @@ const ExpenseModel = require("../models/expense");
 
 exports.addExpense = async (req) => {
     try {
-        // if(req.isAuth) {
+        console.log(req.isAuth );
+        if(req.isAuth) {
             const data = req.body;
             data.createdAt = new Date();
             data.updatedAt = new Date();
             // data.creator = req.userId;
             const expenseData = await ExpenseModel.create(data)
             return expenseData
-        // } else {
-        //     throw new Error("User not logged in!!!")
-        // }
+        } else {
+            throw new Error("User not logged in!!!")
+        }
     } catch (error) {
         return error.message
     }
 }
 exports.updateExpense = async (req) => {
     try {
-        // if(req.isAuth) {
+        if(req.isAuth) {
             const expenseData = await ExpenseModel.findByIdAndUpdate(req.params.expenseId,req.body,{upsert:false})
             return expenseData
-        // } else {
-        //     throw new Error("User not logged in!!!")
-        // }
+        } else {
+            throw new Error("User not logged in!!!")
+        }
     } catch (error) {
         return error.message
     }
