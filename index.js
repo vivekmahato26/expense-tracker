@@ -23,4 +23,4 @@ app.use(auth);
 app.use("/users",UserRouter);
 app.use("/expenses",ExpenseRouter);
 
-app.listen(8000,()=> console.log("server startetd at port 8000"));
+app.listen(9898,()=> console.log("server startetd at port 9898"));
