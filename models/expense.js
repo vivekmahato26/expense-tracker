@@ -39,6 +39,10 @@ const ExpenseSchema = new Mongoose.Schema({
     amount: {
         type : Number,
         required: true
+    },
+    img: {
+        type : Number,
+        required: true
     }
 
 
