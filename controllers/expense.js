@@ -7,7 +7,7 @@ exports.addExpense = async (req) => {
             const data = req.body;
             data.createdAt = new Date();
             data.updatedAt = new Date();
-            // data.creator = req.userId;
+            data.creator = req.userId;
             const expenseData = await ExpenseModel.create(data)
             return expenseData
         } else {

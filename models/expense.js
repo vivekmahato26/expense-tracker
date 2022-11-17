@@ -31,8 +31,7 @@ const ExpenseSchema = new Mongoose.Schema({
         required: true
     },
     creator : {
-        // type: Mongoose.SchemaTypes.ObjectId,
-        type: String,
+        type: Mongoose.SchemaTypes.ObjectId,
         ref: UserModel,
         required: true
     },
