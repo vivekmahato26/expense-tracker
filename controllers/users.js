@@ -1,7 +1,7 @@
 const UserModel = require("../models/users");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const CryptoJS = require("crypto-js");
+const Crpyto = require("crypto-js");
 
 
 exports.addUser = async (data) => {
@@ -40,10 +40,14 @@ exports.login = async (data) => {
             email: checkUser[0].email,
             access: checkUser[0].access,
         };
-        const token = jwt.sign(authData, process.env.JWT_KEY);
-        console.log(token);        
-        console.log(JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString()));
-        // authData.token = encryptedData;
+        console.log(JSON.stringify(authData));
+        let token;
+        try {
+             token = Crpyto.AES.encrypt(JSON.stringify(authData), process.env.JWT_KEY).toString()
+        } catch (error) {
+            console.log(error);
+        }
+        console.log(token);
         return { ...authData, token };
     } catch (error) {
         return error.message

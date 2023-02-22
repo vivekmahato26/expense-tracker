@@ -1,35 +1,38 @@
 const jwt = require("jsonwebtoken");
-
+const CryptoJS = require("crypto-js");
 module.exports = (req, res, next) => {
-  const authHeader = req.get("Authorization");
-  if (!authHeader) {
-    req.isAuth = false;
-    return next();
-  }
-  console.log(authHeader)
-  const token = authHeader.split(" ")[1];
-  if (!token || token === ""||token =="null") {
-    req.isAuth = false;
-    return next();
-  }
-  let decodedToken;
-  try {
-    console.log(token)
-    decodedToken = (JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString()));
-    if (decodedToken.email) {
-      req.isAuth = true;
-      req.userId = decodedToken.userId;
-      req.email = decodedToken.email;
-      req.access = decodedToken.access;
-    } else {
-      req.isAuth = false;
-      return next();
+    const authHeader = req.get("Authorization");
+    console.log(authHeader);
+    if (!authHeader) {
+        req.isAuth = false;
+        return next();
     }
-  } catch (err) {
-    console.log(err.message);
-    req.isAuth = false;
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+        req.isAuth = false;
+        return next();
+    }
+    try {
+        var bytes = CryptoJS.AES.decrypt(token, process.env.JWT_KEY);
+        var originalText = bytes.toString(CryptoJS.enc.Utf8);
+        const decodedToken = JSON.parse(originalText);
+        console.log(originalText)
+        const keys = Object.keys(decodedToken); 
+        if (keys.length) {
+            req.isAuth = true;
+            req.userId = decodedToken.userId;
+            req.email = decodedToken.email;
+            req.access = decodedToken.access;
+            return next();
+        } else {
+            req.isAuth = false;
+            return next();
+        }
 
-    return next();
-  }
-  return next();
-};
+    } catch (error) {
+        console.log(error)
+        req.isAuth = false;
+        return next();
+    }
+
+}
