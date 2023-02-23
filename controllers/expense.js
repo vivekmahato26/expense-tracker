@@ -32,7 +32,7 @@ exports.updateExpense = async (req) => {
 exports.deleteExpense = async (req) => {
     try {
         if(req.isAuth) {
-            const expenseData = await ExpenseModel.findBYIdAndDelete(req.params.expenseId)
+            const expenseData = await ExpenseModel.findByIdAndDelete(req.params.expenseId)
             return expenseData
         } else {
             throw new Error("User not logged in!!!")
